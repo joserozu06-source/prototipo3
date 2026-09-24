@@ -9,12 +9,23 @@ scale = 0.06
 ---------------------------------------------INICIALIZACION------------------------------------------------
 function love.load ()
     Spritespersonajes()
-    enemy = Enemigo:Nuevo(100, 100)
-    Spritesenemigo()
-     tiempo = 15
+   
+    enemigos = {
+    Enemigo:Nuevo(100, 100),
+    Enemigo:Nuevo(300, 200),
+    Enemigo:Nuevo(500, 400)
+}
+
+for _, enemigo in ipairs(enemigos) do
+    enemigo:Sprites()
+end
+
+enemy = enemigos[1]
+
+
+tiempo = 15
 
      
-
 -----FONDO
 backround = love.graphics.newImage("sprites/background.png")
 
@@ -49,6 +60,11 @@ end
 function love.update(dt)
   if gameState == "playing" then
 
+   for _, enemigo in ipairs(enemigos) do
+    enemigo:Actualizar(player.x, player.y, player.ancho, dt)
+    enemigo:Animar(dt, player)
+end
+
     -------------------------------MOVIMIENTO------------------------------------------------------------------------------------
     Moviento(dt)
          
@@ -58,18 +74,6 @@ function love.update(dt)
 
     if player.frame >= #player.anim + 1 then
         player.frame = 1
-    end
-
-    -- Animación enemigo
-    enemy.frame = enemy.frame + enemy.frameSpeed * dt
-
-    if enemy.frame >= #enemy.anim + 1 then
-        enemy.frame = 1
-        if player.x > enemy.x then
-            enemy.direction = 1   --  derecha
-        else
-            enemy.direction = -1  --izq
-        end
     end
 
 
@@ -123,26 +127,7 @@ end
 
       local dist_x = math.abs(enemy.x - player.x)
       local dist_y = math.abs(enemy.y - player.y)
-
-      
------ia enemigo
-    if dist_x > dist_y then
-        if dist_x > 40 then
-           if enemy.x < player.x then
-              enemy.x = enemy.x + (enemy.speed * dt)
-           elseif enemy.x > player.x then
-             enemy.x = enemy.x - (enemy.speed * dt)
-            end
-         end
-    else
-      if dist_y > 40 then
-         if enemy.y < player.y then
-              enemy.y = enemy.y + (enemy.speed * dt)
-             elseif enemy.y > player.y then
-              enemy.y = enemy.y - (enemy.speed * dt)
-           end
-      end  
-    end
+    
   end
 end
 
@@ -150,7 +135,6 @@ end
 
 function love.draw()
     local playerFrame = math.floor(player.frame)
-    local enemyFrame = math.floor(enemy.frame)
 
     love.graphics.draw(backround, 0, 0) --fondo
 
@@ -187,17 +171,10 @@ function love.draw()
             player.anim[playerFrame]:getHeight() / 2
         )
 
-        -- Enemigo
-        love.graphics.draw(
-            enemy.anim[enemyFrame],
-            enemy.x,
-            enemy.y,
-            0,
-            scale * enemy.direction,
-            scale,
-            enemy.anim[enemyFrame]:getWidth() / 2,
-            enemy.anim[enemyFrame]:getHeight() / 2
-        )
+        for _, enemigo in ipairs(enemigos) do
+    enemigo:Dibujar(scale)
+end
+
 
         love.graphics.print(
             "Sobrevive 10 segundos! Tiempo: " .. math.max(0, math.ceil(winTime - timer)),
