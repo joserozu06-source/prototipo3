@@ -1,37 +1,37 @@
-local jugador20 = require "jugador"
-local jugador20 = require "enemigo"
-
-------------------------------------------------------INICIALIZACION------------------------------------------------
-function love.load ()
-    Spritespersonajes()
-    Spritesenemigo()
-     tiempo = 15
-end
+local jugador = require "jugador"
+local enemigo = require "enemigo"
 
 gameState = "playing"
 timer = 0
 winTime = 10
-
 scale = 0.06
 
+---------------------------------------------INICIALIZACION------------------------------------------------
+function love.load ()
+    Spritespersonajes()
+    enemy = Enemigo:Nuevo(100, 100)
+    Spritesenemigo()
+     tiempo = 15
 
+     
 
----FONDO
+-----FONDO
 backround = love.graphics.newImage("sprites/background.png")
 
---Pantallas finales
+
+----PANTALLAS FINALES
 winImage = love.graphics.newImage("sprites/ganar.png")
 loseImage = love.graphics.newImage("sprites/perder.png")
 
 
----MUSICA
+--------MUSICA
 music = love.audio.newSource("musica/musica.wav","stream")
 love.audio.play(music)
 winSound = love.audio.newSource("musica/win.mp3", "static")
 loseSound = love.audio.newSource("musica/gameover.mp3", "static")
 catchSound = love.audio.newSource("musica/bau_te_agarra.wav", "static")
 
---Huellas del enemigo
+--HUELLAS ENEMIGO
 footprints = {}
 
 footImages = {
@@ -43,16 +43,15 @@ footImages = {
 
 footTimer = 0
 
+end
 
-
------------------------------------------------------ACTUALIZACION-------------------------------------------------
+-------------------------------------------ACTUALIZACION-------------------------------------------------
 function love.update(dt)
   if gameState == "playing" then
 
     -------------------------------MOVIMIENTO------------------------------------------------------------------------------------
     Moviento(dt)
          
-
 
      -- Animación jugador
     player.frame = player.frame + player.frameSpeed * dt
@@ -72,7 +71,6 @@ function love.update(dt)
             enemy.direction = -1  --izq
         end
     end
-
 
 
           -- Temporizador huellas
@@ -98,7 +96,6 @@ for i = #footprints,1,-1 do
         table.remove(footprints,i)
     end
 end
-
 
 
       ------- Colisión
@@ -149,7 +146,7 @@ end
   end
 end
 
---------------------------------------------------------RENDERIZADO------------------------------------------
+------------------------------------------------RENDERIZADO------------------------------------------
 
 function love.draw()
     local playerFrame = math.floor(player.frame)

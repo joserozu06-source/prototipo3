@@ -1,15 +1,24 @@
--- -----------TABLA ENEMIGO----------------------------------------------
-enemy = {
-x = 0,
-y = 0,
-speed = 120,
-alto = 45,
-ancho = 45,
-anim ={},
-frame = 1,
-frameSpeed = 6,
-direction = 1
-}  
+------------- CLASE ENEMIGO --------------------------------
+Enemigo = {}
+Enemigo.__index = Enemigo
+
+
+function Enemigo:Nuevo(x, y)
+
+    local o = setmetatable({}, Enemigo)
+    o.x = x
+    o.y = y
+    o.speed = 120
+    o.alto = 45
+    o.ancho = 45
+    o.anim = {}
+    o.frame = 1
+    o.frameSpeed = 6
+    o.direction = 1
+
+    return o
+end
+
 
 -----------ANIMACION ENEMIGO---------------
 function Spritesenemigo()
