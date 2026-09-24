@@ -102,18 +102,23 @@ for i = #footprints,1,-1 do
 end
 
 
-      ------- Colisión
-        if player.x < enemy.x + enemy.ancho and
-      player.x + player.ancho > enemy.x and
-      player.y < enemy.y + enemy.alto and
-      player.y + player.alto > enemy.y then
+     ------- Colisión
+for _, enemigo in ipairs(enemigos) do
 
-          if gameState ~= "lose" then
-              love.audio.stop(music)        
-              love.audio.play(loseSound)  
-              gameState = "lose"
-          end
-      end
+    if player.x < enemigo.x + enemigo.ancho and 
+       player.x + player.ancho > enemigo.x and 
+       player.y < enemigo.y + enemigo.alto and 
+       player.y + player.alto > enemigo.y then 
+
+        if gameState ~= "lose" then
+            love.audio.stop(music)
+            love.audio.play(loseSound)
+            gameState = "lose"
+        end
+
+        break
+    end
+end
         
      ------- Tiempo
         timer = timer + dt
