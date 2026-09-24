@@ -1,41 +1,18 @@
 local jugador20 = require "jugador"
+local jugador20 = require "enemigo"
+
+------------------------------------------------------INICIALIZACION------------------------------------------------
+function love.load ()
+    Spritespersonajes()
+    Spritesenemigo()
+     tiempo = 15
+end
+
 gameState = "playing"
 timer = 0
 winTime = 10
 
 scale = 0.06
-
-------------------------------------------------------INICIALIZACION------------------------------------------------
-function love.load ()
-    Spritespersonajes()
-     tiempo = 15
-end
-
---------------------------------------------------- TABLA JUGADOR----------------------------------------------
-player = {
-x = (love.graphics.getWidth() / 2) - (125 * 0.5 / 2), 
-y = (love.graphics.getHeight() / 2) - (125 * 0.5 / 2), 
-speed = 120, 
-alto = 45,
-ancho = 45,
-anim ={},
-frame = 1,
-frameSpeed = 8,
-direction = 1
-}   
-
--- -------------------------------------------------TABLA ENEMIGO----------------------------------------------
-enemy = {
-x = 0,
-y = 0,
-speed = 120,
-alto = 45,
-ancho = 45,
-anim ={},
-frame = 1,
-frameSpeed = 6,
-direction = 1
-}  
 
 
 
@@ -198,7 +175,7 @@ function love.draw()
             )
         end
         
-       --Reseteamos el color a blanco total para no hacer invisibles a los personajes
+       --Reseteamos el color a blanco total
         love.graphics.setColor(1, 1, 1, 1) 
 
         -- Jugador
