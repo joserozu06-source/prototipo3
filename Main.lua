@@ -1,29 +1,25 @@
-local jugador = require "jugador"
-local enemigo = require "enemigo"
+require "jugador"
+require "enemigo"
 
 gameState = "playing"
 timer = 0
 winTime = 10
 scale = 0.06
+enemyScale = 0.045
 
 ---------------------------------------------INICIALIZACION------------------------------------------------
 function love.load ()
     Spritespersonajes()
    
     enemigos = {
-    Enemigo:Nuevo(100, 100),
-    Enemigo:Nuevo(300, 200),
-    Enemigo:Nuevo(500, 400)
+    Enemigo:Nuevo(50, 50),
+    Enemigo:Nuevo(200, 100),
+    Enemigo:Nuevo(50, 200)
 }
 
 for _, enemigo in ipairs(enemigos) do
     enemigo:Sprites()
 end
-
-enemy = enemigos[1]
-
-
-tiempo = 15
 
      
 -----FONDO
@@ -68,7 +64,6 @@ end
     -------------------------------MOVIMIENTO------------------------------------------------------------------------------------
     Moviento(dt)
          
-
      -- Animación jugador
     player.frame = player.frame + player.frameSpeed * dt
 
@@ -77,19 +72,21 @@ end
     end
 
 
-          -- Temporizador huellas
+     -- Temporizador huellas
 footTimer = footTimer + dt
 
 if footTimer >= 0.25 then
     footTimer = 0
 
-    table.insert(footprints,{
-    x = enemy.x - (20 * enemy.direction),
-    y = enemy.y + 35,
-    img = footImages[love.math.random(#footImages)],
-    alpha = 1,
-    direction = enemy.direction
-})
+    for _, enemigo in ipairs(enemigos) do
+        table.insert(footprints,{
+            x = enemigo.x - (20 * enemigo.direction),
+            y = enemigo.y + 35,
+            img = footImages[love.math.random(#footImages)],
+            alpha = 1,
+            direction = enemigo.direction
+        })
+    end
 end
 
 -- Desvanecer huellas
@@ -130,8 +127,7 @@ end
             end
         end
 
-      local dist_x = math.abs(enemy.x - player.x)
-      local dist_y = math.abs(enemy.y - player.y)
+     
     
   end
 end
@@ -177,7 +173,7 @@ function love.draw()
         )
 
         for _, enemigo in ipairs(enemigos) do
-    enemigo:Dibujar(scale)
+    enemigo:Dibujar(enemyScale)
 end
 
 

@@ -3,18 +3,19 @@ Enemigo = {}
 Enemigo.__index = Enemigo
 
 
-function Enemigo:Nuevo(x, y)
+function Enemigo:Nuevo(x, y, sprites)
 
     local o = setmetatable({}, Enemigo)
     o.x = x
     o.y = y
-    o.speed = 120
+    o.speed = 110
     o.alto = 45
     o.ancho = 45
     o.anim = {}
     o.frame = 1
     o.frameSpeed = 6
     o.direction = 1
+    o.sprites = sprites
 
     return o
 end
@@ -79,17 +80,17 @@ function Enemigo:Animar(dt, player)
 
 end
 
-function Enemigo:Dibujar(scale)
+function Enemigo:Dibujar(enemyScale)
 
     local enemyFrame = math.floor(self.frame)
 
-    love.graphics.draw(
+      love.graphics.draw(
         self.anim[enemyFrame],
         self.x,
         self.y,
         0,
-        scale * self.direction,
-        scale,
+        enemyScale * self.direction,
+        enemyScale,
         self.anim[enemyFrame]:getWidth() / 2,
         self.anim[enemyFrame]:getHeight() / 2
     )
