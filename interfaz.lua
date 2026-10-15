@@ -8,18 +8,40 @@ end
 
 function Interfaz:Dibujar(winTime, timer, gameState)
 
-    love.graphics.setFont(fuenteHUD)
-
     if gameState == "playing" then
-        love.graphics.print(
-            "Sobrevive 10 segundos! Tiempo: "
-            .. math.max(0, math.ceil(winTime - timer)),
-            10,
-            10
-        )
-    end
 
-    love.graphics.print(math.ceil(timer), 380, 20)
+        local ancho = love.graphics.getWidth()
+
+        -- CARTEL CENTRADO ARRIBA
+        local escala = math.min(
+    0.12,
+    (ancho - 40) / cartelObjetivo:getWidth()
+)
+        love.graphics.draw(
+            cartelObjetivo,
+            ancho / 2,
+            15,
+            0,
+            escala,
+            escala,
+            cartelObjetivo:getWidth() / 2,
+            0
+        )
+
+        -- CONTADOR DEBAJO DEL CARTEL
+love.graphics.setFont(fuenteHUD)
+
+local altoCartel = cartelObjetivo:getHeight() * escala
+
+love.graphics.printf(
+    "Tiempo: " .. math.max(0, math.ceil(winTime - timer)),
+    0,
+    550,
+    ancho,
+    "center"
+)
+
+    end
 
 end
 
