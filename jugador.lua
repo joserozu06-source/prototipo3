@@ -1,56 +1,68 @@
---------------TABLA JUGADOR--------------
-player = {
-x = (love.graphics.getWidth() / 2) - (125 * 0.5 / 2), 
-y = (love.graphics.getHeight() / 2) - (125 * 0.5 / 2), 
-speed = 120, 
-alto = 45,
-ancho = 45,
-anim ={},
-frame = 1,
-frameSpeed = 8,
-direction = 1
-}   
+Jugador = {}
+Jugador.__index = Jugador
 
----------ANIMACION JUGADOR---------------
-function Spritespersonajes()
+function Jugador:Nuevo()
+    local o = setmetatable({}, Jugador)
 
-table.insert(player.anim, love.graphics.newImage("sprites/wiki1.png"))
-table.insert(player.anim, love.graphics.newImage("sprites/wiki2.png"))
-table.insert(player.anim, love.graphics.newImage("sprites/wiki3.png"))
-table.insert(player.anim, love.graphics.newImage("sprites/wiki4.png"))
+    o.x = (love.graphics.getWidth() / 2) - (125 * 0.5 / 2)
+    o.y = (love.graphics.getHeight() / 2) - (125 * 0.5 / 2)
+    o.speed = 120
+    o.alto = 45
+    o.ancho = 45
+    o.anim = {}
+    o.frame = 1
+    o.frameSpeed = 8
+    o.direction = 1
+
+    return o
 end
 
+function Jugador:Sprites()
+    table.insert(self.anim, love.graphics.newImage("sprites/wiki1.png"))
+    table.insert(self.anim, love.graphics.newImage("sprites/wiki2.png"))
+    table.insert(self.anim, love.graphics.newImage("sprites/wiki3.png"))
+    table.insert(self.anim, love.graphics.newImage("sprites/wiki4.png"))
+end
 
-function Moviento(dt)
-if love.keyboard.isDown("d") then
-         player.x = player.x + player.speed * dt
-          player.direction = 1
+function Jugador:Actualizar(dt)
+    if love.keyboard.isDown("d", "right") then
+        self.x = self.x + self.speed * dt
+        self.direction = 1
     end
-     if love.keyboard.isDown("a") then
-         player.x = player.x - player.speed * dt
-           player.direction = -1
-         
+
+    if love.keyboard.isDown("a", "left") then
+        self.x = self.x - self.speed * dt
+        self.direction = -1
     end
-     if love.keyboard.isDown("s") then
-         player.y = player.y + player.speed* dt
-          
+
+    if love.keyboard.isDown("s", "down") then
+        self.y = self.y + self.speed * dt
     end
-     if love.keyboard.isDown("w") then
-         player.y = player.y - player.speed * dt
+
+    if love.keyboard.isDown("w", "up") then
+        self.y = self.y - self.speed * dt
     end
-    
-    if love.keyboard.isDown("right") then
-         player.x = player.x + player.speed * dt
-           player.direction = 1
-    end
-     if love.keyboard.isDown("left") then
-         player.x = player.x - player.speed * dt
-           player.direction = -1
-    end
-     if love.keyboard.isDown("down") then
-         player.y = player.y + player.speed * dt
-    end
-     if love.keyboard.isDown("up") then
-         player.y = player.y - player.speed * dt
+
+    self.frame = self.frame + self.frameSpeed * dt
+
+    if self.frame >= #self.anim + 1 then
+        self.frame = 1
     end
 end
+
+function Jugador:Dibujar(scale)
+    local frame = math.floor(self.frame)
+
+    love.graphics.draw(
+        self.anim[frame],
+        self.x,
+        self.y,
+        0,
+        scale * self.direction,
+        scale,
+        self.anim[frame]:getWidth() / 2,
+        self.anim[frame]:getHeight() / 2
+    )
+end
+
+return Jugador

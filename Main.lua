@@ -1,5 +1,6 @@
 require "jugador"
 require "enemigo"
+require "interfaz"
 
 gameState = "playing"
 timer = 0
@@ -9,13 +10,17 @@ enemyScale = 0.045
 
 ---------------------------------------------INICIALIZACION------------------------------------------------
 function love.load ()
-    Spritespersonajes()
+    
+    player = Jugador:Nuevo()
+    player:Sprites()
    
     enemigos = {
     Enemigo:Nuevo(50, 50),
     Enemigo:Nuevo(200, 100),
     Enemigo:Nuevo(50, 200)
 }
+
+hud = Interfaz:Nueva()
 
 for _, enemigo in ipairs(enemigos) do
     enemigo:Sprites()
@@ -62,15 +67,8 @@ function love.update(dt)
 end
 
     -------------------------------MOVIMIENTO------------------------------------------------------------------------------------
-    Moviento(dt)
+    player:Actualizar(dt)
          
-     -- Animación jugador
-    player.frame = player.frame + player.frameSpeed * dt
-
-    if player.frame >= #player.anim + 1 then
-        player.frame = 1
-    end
-
 
      -- Temporizador huellas
 footTimer = footTimer + dt
@@ -135,7 +133,6 @@ end
 ------------------------------------------------RENDERIZADO------------------------------------------
 
 function love.draw()
-    local playerFrame = math.floor(player.frame)
 
     love.graphics.draw(backround, 0, 0) --fondo
 
@@ -161,27 +158,16 @@ function love.draw()
         love.graphics.setColor(1, 1, 1, 1) 
 
         -- Jugador
-        love.graphics.draw(
-            player.anim[playerFrame],
-            player.x,
-            player.y,
-            0,
-            scale * player.direction,
-            scale,
-            player.anim[playerFrame]:getWidth() / 2,
-            player.anim[playerFrame]:getHeight() / 2
-        )
+      player:Dibujar(scale)
 
+        ----------------------ENEMIGO---------
         for _, enemigo in ipairs(enemigos) do
     enemigo:Dibujar(enemyScale)
+
 end
 
-
-        love.graphics.print(
-            "Sobrevive 10 segundos! Tiempo: " .. math.max(0, math.ceil(winTime - timer)),
-            10,
-            10
-        )
+----------------------------------INTERFAZ-------------
+        hud:Dibujar(winTime, timer, gameState)
 
     elseif gameState == "win" then
         local imageScale = 0.25
@@ -209,6 +195,4 @@ end
             loseImage:getHeight() / 2
         )
     end
-
-    love.graphics.print(math.ceil(timer), 380, 20)
 end
