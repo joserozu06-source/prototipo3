@@ -44,8 +44,12 @@ function love.load ()
     Enemigo:Nuevo(200, 100),
     Enemigo:Nuevo(50, 200)
 }
+cartelObjetivo = love.graphics.newImage("sprites/cartel.png")
+
+fuenteHUD = love.graphics.newFont("fonts/PixelifySans-Regular.ttf", 20)
 
 hud = Interfaz:Nueva()
+
 
 for _, enemigo in ipairs(enemigos) do
     enemigo:Sprites()
