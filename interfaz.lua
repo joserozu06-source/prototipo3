@@ -8,6 +8,8 @@ end
 
 function Interfaz:Dibujar(winTime, timer, gameState)
 
+    love.graphics.setFont(fuenteHUD)
+
     if gameState == "playing" then
         love.graphics.print(
             "Sobrevive 10 segundos! Tiempo: "

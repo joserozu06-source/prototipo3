@@ -20,6 +20,8 @@ function love.load ()
     Enemigo:Nuevo(50, 200)
 }
 
+fuenteHUD = love.graphics.newFont("fonts/PixelifySans-Regular.ttf", 20)
+
 hud = Interfaz:Nueva()
 
 for _, enemigo in ipairs(enemigos) do
