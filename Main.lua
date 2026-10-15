@@ -7,6 +7,31 @@ timer = 0
 winTime = 10
 scale = 0.06
 enemyScale = 0.045
+depurar = false
+
+-- EVENTO PERSONALIZADO: activar/desactivar depuración
+function love.handlers.modoDebug()
+    depurar = not depurar
+end
+
+
+-- EVENTO PERSONALIZADO: jugador atrapado
+function love.handlers.jugadorAtrapado()
+    if gameState == "playing" then
+        love.audio.stop(music)
+        love.audio.play(loseSound)
+        gameState = "lose"
+    end
+end
+
+
+-- DETECTAR LA TECLA F1
+function love.keypressed(key, scancode, isrepeat)
+    if key == "f1" and not isrepeat then
+        love.event.push("modoDebug")
+    end
+end
+
 
 ---------------------------------------------INICIALIZACION------------------------------------------------
 function love.load ()
@@ -105,11 +130,7 @@ for _, enemigo in ipairs(enemigos) do
        player.y < enemigo.y + enemigo.alto and 
        player.y + player.alto > enemigo.y then 
 
-        if gameState ~= "lose" then
-            love.audio.stop(music)
-            love.audio.play(loseSound)
-            gameState = "lose"
-        end
+        love.event.push("jugadorAtrapado")
 
         break
     end
@@ -194,5 +215,22 @@ end
             loseImage:getWidth() / 2,
             loseImage:getHeight() / 2
         )
+    end
+
+
+    ----------------------- INTERFAZ DE DEPURACION -----------------------
+    if depurar then
+        love.graphics.setColor(0, 1, 0, 1)
+
+        love.graphics.print("MODO DEBUG ACTIVADO", 10, 40)
+        love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 60)
+        love.graphics.print("Estado: " .. gameState, 10, 80)
+        love.graphics.print(
+            "Tiempo: " .. string.format("%.2f", timer),
+            10,
+            100
+        )
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end
